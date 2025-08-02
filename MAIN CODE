@@ -1,0 +1,29 @@
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(cluster)
+library(factoextra)
+
+# Load dataset
+data <- read.csv("/content/Wholesale customers data.csv")
+
+# Select relevant numerical columns for clustering
+scaled_data <- scale(data[, c("Fresh", "Milk", "Grocery", "Frozen", "Detergents_Paper", "Delicassen")])
+
+# Optimize: Use a subset for Elbow Method
+sample_data <- scaled_data[sample(1:nrow(scaled_data), min(500, nrow(scaled_data))), ]
+fviz_nbclust(sample_data, kmeans, method = "wss")
+
+# Apply k-means clustering (optimized)
+set.seed(123)
+kmeans_result <- kmeans(scaled_data, centers = 3, nstart = 10)  # Reduced nstart for speed
+
+# Assign cluster labels to the original data
+data$Cluster <- as.factor(kmeans_result$cluster)
+
+# Visualize clusters using PCA
+fviz_cluster(kmeans_result, data = scaled_data, geom = "point", ellipse.type = "convex") +
+  labs(title = "Customer Segmentation using K-Means Clustering")
+
+# Display summary of clusters
+summary(data)

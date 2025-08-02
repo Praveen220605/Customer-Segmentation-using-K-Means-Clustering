@@ -32,4 +32,4 @@ This project can help businesses:
 - Design personalized offers
 
 ## ✍️ Author
-Praveen Sri Ram
+Praveen Sri Ram M
